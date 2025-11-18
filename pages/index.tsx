@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Footer from "../components/footer";
 import Header from "../components/header";
 import Meta from "../components/meta";
@@ -22,22 +22,50 @@ interface Generated {
 }
 
 const Index: NextPage = () => {
+  // -------------------------
+  // 🔐 PASSCODE SECURITY
+  // -------------------------
+  const [auth, setAuth] = useState(false);
+  const [code, setCode] = useState("");
+
+  function verify() {
+    const PASSCODE = "1234"; // ⬅ change your passcode here
+
+    if (code === PASSCODE) {
+      sessionStorage.setItem("upier_access", "granted");
+      setAuth(true);
+    } else {
+      alert("Wrong Passcode!");
+    }
+  }
+
+  useEffect(() => {
+    if (sessionStorage.getItem("upier_access") === "granted") {
+      setAuth(true);
+    }
+  }, []);
+
+  // -------------------------
+  // ORIGINAL APP LOGIC
+  // -------------------------
   const [input, setinput] = useState<Input>({
     vpa: "",
     amount: "",
   });
+
   const [invalid, setinvalid] = useState<Invalid>({
     show: false,
     text: "",
   });
+
   const [generated, setgenerated] = useState<Generated>({
     show: false,
     url: "",
   });
+
   const [copied, setcopied] = useState<boolean>(false);
 
   function generate() {
-    // generate a deep link
     const vpa: string = input.vpa;
     const amount: any = input.amount;
 
@@ -60,7 +88,6 @@ const Index: NextPage = () => {
         text: !vpa || vpa === "" ? "* Enter an UPI Id" : "* Invalid UPI Id",
       });
     }
-    return;
   }
 
   function copy() {
@@ -69,6 +96,62 @@ const Index: NextPage = () => {
     setcopied(true);
   }
 
+  // -------------------------
+  // SHOW PASSCODE SCREEN FIRST
+  // -------------------------
+  if (!auth) {
+    return (
+      <main
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "#f9fafb",
+          padding: "20px"
+        }}
+      >
+        <h2 style={{ fontSize: "24px", marginBottom: "20px", fontWeight: "600" }}>
+          Enter Passcode
+        </h2>
+
+        <input
+          type="password"
+          placeholder="****"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          style={{
+            padding: "12px 15px",
+            fontSize: "18px",
+            textAlign: "center",
+            width: "150px",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+            marginBottom: "15px",
+          }}
+        />
+
+        <button
+          onClick={verify}
+          style={{
+            background: "#000",
+            color: "#fff",
+            padding: "10px 20px",
+            borderRadius: "8px",
+            fontWeight: "600",
+            cursor: "pointer",
+          }}
+        >
+          U N L O C K
+        </button>
+      </main>
+    );
+  }
+
+  // -------------------------
+  // NORMAL APP UI AFTER PASSCODE
+  // -------------------------
   return (
     <>
       <Meta title="Create | Upier" />
@@ -80,7 +163,6 @@ const Index: NextPage = () => {
           {!generated.show ? (
             <>
               {/* Generate section start */}
-
               <div className="generate">
                 <div className="center">
                   <p className="pdetailupiid">Enter Your VPA (UPI ID)</p>
@@ -94,6 +176,7 @@ const Index: NextPage = () => {
                     value={input.vpa}
                   />
                 </div>
+
                 <div className="amountdiv">
                   <p className="pdetailamount">
                     Amount ={" "}
@@ -110,6 +193,7 @@ const Index: NextPage = () => {
                   </p>
                   <p className="vsmalltext">(Optional)</p>
                 </div>
+
                 <div className="center">
                   <button className="createbutton" onClick={generate}>
                     C R E A T E
@@ -119,8 +203,6 @@ const Index: NextPage = () => {
                   )}
                 </div>
               </div>
-
-              {/* Generate section end */}
             </>
           ) : (
             <>
@@ -144,11 +226,10 @@ const Index: NextPage = () => {
                   </a>
                 </div>
               </div>
-              {/* Generated section end */}
             </>
           )}
 
-          {/* Additional data section start */}
+          {/* Additional data */}
           <div className="additionaldata">
             <p className="additionaltext">
               If you have any questions about security or privacy, Check our{" "}
@@ -161,8 +242,8 @@ const Index: NextPage = () => {
             <p className="hashtag"># Go Cashless</p>
             <p className="india">Made in 🇮🇳 for 🇮🇳</p>
           </div>
-          {/* Additional data section end */}
         </section>
+
         <Footer />
       </main>
     </>
