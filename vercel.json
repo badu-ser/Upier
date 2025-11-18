@@ -9,7 +9,7 @@
 {
   "headers": [
     {
-      "source": "/protected/(.*)",
+      "source": "(.*)",
       "has": [
         {
           "type": "header",
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "source": "/protected/(.*)",
+      "source": "(.*)",
       "headers": [
         { "key": "x-blocked", "value": "true" }
       ],
