@@ -6,27 +6,3 @@
     }
   ]
 }
-{
-  "headers": [
-    {
-      "source": "(.*)",
-      "has": [
-        {
-          "type": "header",
-          "key": "referer",
-          "value": "https://x4-esports-official.vercel.app/(.*)"
-        }
-      ],
-      "headers": [
-        { "key": "x-allowed", "value": "true" }
-      ]
-    },
-    {
-      "source": "(.*)",
-      "headers": [
-        { "key": "x-blocked", "value": "true" }
-      ],
-      "status": 403
-    }
-  ]
-}
