@@ -19,21 +19,21 @@ const Footer: NextPage = () => {
           <u>Privacy Policy</u>
         </Link>
       </p>
-      <p className="X4 eSports India 🇮🇳">
+      <p className="tuhin">
         A Payment page by{" "}
         <a
           href="http://thetuhin.com/?ref=upier"
           target="_blank"
           rel="noreferrer"
         >
-          Tuhin
+          X4 eSports India 🇮🇳
         </a>
       </p>
       <img
-        src="/images/github.svg"
+        src="https://files.catbox.moe/kilmh9.jpeg"
         className="center"
         width="35"
-        alt="Github"
+        alt="X4 eSports Website"
       />
     </footer>
   );
